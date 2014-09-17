@@ -3,8 +3,8 @@ AppStack
 
 Plug and Play application stacks with Docker
 
-DATACONTAINER
--------------
+DATA
+----
 
 docker run -d -v /tmp/dataonly/web:/var/www/html -v /tmp/dataonly/mysql:/var/lib/mysql -v /tmp/dataonly/logs:/var/log -v /tmp/dataonly/backup:/var/backup -v /conf --name data dataonly "test"
 
