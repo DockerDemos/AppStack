@@ -3,6 +3,7 @@
 #
 
 # MUST USE el6 until patch upstream makes it into packages
+# https://github.com/docker/docker/pull/5930
 FROM centos:centos6
 MAINTAINER Chris Collins <collins.christopher@gmail.com>
 
