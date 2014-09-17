@@ -16,6 +16,7 @@ docker run -it --rm=true --volumes-from data -e "ROOT_PASS=MY_ROOT_PW" -e "BACKU
 SETUP-WP
 --------
 
+docker tag setup-wp:MY_WORDPRESS_VERSION  setup-wp:latest
 docker run -it --rm=true --volumes-from data setup-wp:latest
 
 MYSQL
