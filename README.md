@@ -11,7 +11,7 @@ docker run -d -v /tmp/dataonly/web:/var/www/html -v /tmp/dataonly/mysql:/var/lib
 SETUP-MYSQL
 -----------
 
-docker run -it --rm=true --volumes-from data -e "ROOT_PASS=TIMRPYB" -e "BACKUP_PASS=TIMBPYB" setup-mysql
+docker run -it --rm=true --volumes-from data -e "ROOT_PASS=MY_ROOT_PW" -e "BACKUP_PASS=MY_BACKUP_PW" setup-mysql
 
 SETUP-WP
 --------
@@ -30,5 +30,5 @@ docker run -d -P --volumes-from data --name web apache
 
 BACKUP
 ------
-docker run -it --rm=true --volumes-from data --name backup --link db:db backup
+docker run -it --rm=true --volumes-from data -e "BACKUP_PASS=MY_BACKUP_PASS" --name backup --link db:db backup
 
