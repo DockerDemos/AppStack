@@ -1,11 +1,31 @@
 #!/bin/sh
 
-ARG="$1"
+f_help() {
+  echo -e "
+  Acceptable arguments are:
+    --help  - Print this message
+    --debug - Print envars to the screen \n"
+  exit 1
+}
 
-if [ "$ARG" = '--help' ] ; then
-  # Some help text here maybe
-  true
+f_debug() {
+
+  echo "Environment Variables"
+  env
+  echo ""
+  exit 1
+}
+
+if [[ $1 == "--debug" ]] ; then
+  f_debug
+elif [[ $1 == "--help" ]] ; then
+  f_help
+elif [[ ! -z $1 ]] ; then
+  echo -e "
+  Unknown argument."
+  f_help
 fi
+
 
 if [[ -z $ROOT_PASS ]] ; then
   echo "NO ROOT USER PASSWORD SPECIFIED"
