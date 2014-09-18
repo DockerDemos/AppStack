@@ -7,11 +7,10 @@
 FROM centos:centos6
 MAINTAINER Chris Collins <collins.christopher@gmail.com>
 
-RUN yum install -y httpd mod_ssl && yum clean all
+RUN yum install -y httpd php php-mysql mod_ssl && yum clean all
 ADD run-apache.sh /run-apache.sh
 
 EXPOSE 80 
 EXPOSE 443 
 
 ENTRYPOINT ["/run-apache.sh"]
-CMD ["--help"]

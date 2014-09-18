@@ -5,4 +5,3 @@ RUN yum install -y mariadb-server && yum clean all
 ADD setup-mysql.sh /setup-mysql.sh 
 
 ENTRYPOINT ["/setup-mysql.sh"]
-CMD ["--help"]

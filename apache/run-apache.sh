@@ -61,6 +61,9 @@ if [[ ! -z $CACERT ]] ; then
   sed -i 's/#SSLCACertificateFile/SSLCACertificateFile/' $SSLFILE
 fi
 
+mkdir -p /var/log/httpd
+chown -R apache.root /var/log/httpd
+
 if [[ $RUNSHELL == 'true' ]] ; then
   exec /bin/bash
 else
