@@ -29,7 +29,7 @@ if [[ "$(/bin/ls -A /var/www/html)" ]] ; then
   exit 1
 else
   cd /
-  /bin/tar -xz  -C /var/www/html --strip-components=1 /latest.tar.gz
+  /bin/tar -xz -C /var/www/html --strip-components=1 /latest.tar.gz
 
   /bin/sed -e "s/database_name_here/$DB_NAME/
   s/username_here/$DB_USER/
