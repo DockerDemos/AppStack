@@ -1,0 +1,6 @@
+pam_duo.conf
+login_duo.conf
+sssd.conf
+*crt
+*key
+*cert
