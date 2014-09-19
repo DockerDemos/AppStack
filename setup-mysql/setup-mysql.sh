@@ -82,7 +82,7 @@ if [ ! -f "$datadir/ibdata1" ] ; then
   /usr/bin/mysqld_safe &
   sleep 5s
 
-  mysql -u root -e "CREATE DATABASE $DB_NAME ; GRANT ALL PRIVILEGES on $DB_NAME.* to \'$DB_USER\'@'%' IDENTIFIED BY \"$DB_PASS\";"
+  mysql -u root -e "CREATE DATABASE $DB_NAME ; GRANT ALL PRIVILEGES on $DB_NAME.* to \"$DB_USER\"@'%' IDENTIFIED BY \"$DB_PASS\";"
   mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'backup'@'%' IDENTIFIED BY \"$BACKUP_PASS\";"
   # MAKE SURE THIS ONE IS LAST, OR WE'LL HAVE TO PASS THE ROOT PW EVERY TIME
   mysql -u root -e "UPDATE mysql.user SET Password=PASSWORD(\"$ROOT_PASS\") WHERE User='root'; FLUSH PRIVILEGES"
