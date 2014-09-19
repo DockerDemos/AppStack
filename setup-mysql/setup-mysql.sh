@@ -1,5 +1,24 @@
 #!/bin/sh
 
+if [[ -z "$APP_DB" ]] ; then
+  echo '$APP_DB environmental variable not set in container'
+  exit 1
+elif [[ -z "$APP_USER" ]] ; then
+  echo '$APP_USER environmental variable not set in container'
+  exit 1
+elif [[ -z "$APP_PASS" ]] ; then
+  echo '$APP_PASS environmental variable not set in container'
+  exit 1
+fi
+
+DB_NAME=$APP_DB
+DB_USER=$APP_USER
+DB_PASS=$APP_PASS
+
+if [[ $1 == "--shell" ]] ; then
+  RUNSHELL='true'
+fi
+
 f_help() {
   echo -e "
   Acceptable arguments are:
@@ -63,7 +82,14 @@ if [ ! -f "$datadir/ibdata1" ] ; then
   /usr/bin/mysqld_safe &
   sleep 5s
 
+  mysql -u root -e "CREATE DATABASE $DB_NAME ; GRANT ALL PRIVILEGES on $DB_NAME.* to \'$DB_USER\'@'%' IDENTIFIED BY \"$DB_PASS\";"
   mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'backup'@'%' IDENTIFIED BY \"$BACKUP_PASS\";"
+  # MAKE SURE THIS ONE IS LAST, OR WE'LL HAVE TO PASS THE ROOT PW EVERY TIME
   mysql -u root -e "UPDATE mysql.user SET Password=PASSWORD(\"$ROOT_PASS\") WHERE User='root'; FLUSH PRIVILEGES"
 
 fi
+
+if [[ $RUNSHELL == 'true' ]] ; then
+  exec /bin/bash
+fi
+
