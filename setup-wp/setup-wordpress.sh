@@ -47,7 +47,9 @@ else
   /'NONCE_SALT'/s/put your unique phrase here/$(pwgen -c -n -1 65)/" \
   /var/www/html/wp-config-sample.php > /var/www/html/wp-config.php
 
-  /bin/chown -R apache /var/www/html
+  # UID 48 is Apache on RHEL-based servers
+  # We can set UID 48 even if the user doesn't exist
+  /bin/chown -R 48 /var/www/html
 fi
 
 if [[ $RUNSHELL == 'true' ]] ; then
