@@ -39,13 +39,12 @@ PasswordAuthentication yes\n\
 RUN sed -i  's/session  required  pam_loginuid.so/session  optional  pam_loginuid.so/'  /etc/pam.d/sshd
 
 # nsswitch.conf setup
-RUN set -e 's/bootparams: nisplus [NOTFOUND=return] files/bootparams: files/ \
-s/services:   files sss/services:   files/ \
-s/netgroup:   nisplus sss/netgroup:   files ldap/ \
-s/publickey:  nisplus/publickey:  files/ \
-s/automount:  files nisplus/automount:  files ldap/ \
-s/aliases:    files nisplus/aliases:    files/ \
-' /etc/nsswitch.conf
+RUN sed -i 's/bootparams: nisplus [NOTFOUND=return] files/bootparams: files/ ; \
+s/services:   files sss/services:   files/ ; \
+s/netgroup:   nisplus sss/netgroup:   files ldap/ ; \
+s/publickey:  nisplus/publickey:  files/ ; \
+s/automount:  files nisplus/automount:  files ldap/ ; \
+s/aliases:    files nisplus/aliases:    files/' /etc/nsswitch.conf 
 
 # SSSD setup
 #ADD sssd.conf /etc/sssd/sssd.conf <-- Secret stuff
