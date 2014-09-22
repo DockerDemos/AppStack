@@ -2,9 +2,14 @@
 # http://www.apache.org
 #
 
-# MUST USE el6 until patch upstream makes it into packages
+# Image can only be built on RHEL-based, 
+# (CentOS, Scientific Linux) servers due to bug; see
 # https://github.com/docker/docker/pull/5930
-FROM centos:centos6
+#
+# If you want to build on another host, checkout the master branch 
+# for the centos:centos6 version
+
+FROM centos:centos7
 MAINTAINER Chris Collins <collins.christopher@gmail.com>
 
 RUN yum install -y httpd php php-mysql mod_ssl && yum clean all
