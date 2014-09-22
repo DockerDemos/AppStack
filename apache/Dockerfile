@@ -1,4 +1,4 @@
-# Docker container for an Apache webserver with Shib + PHP-FPM
+# Docker container for an Apache webserver with mod_php 
 # http://www.apache.org
 #
 
