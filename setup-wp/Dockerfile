@@ -12,7 +12,7 @@ gpgcheck=0\n\
 " >> /etc/yum.repos.d/epel.repo
 
 RUN yum install -y tar sync pwgen && yum clean all
-ADD latest.tar.gz /latest.tar.gz
+RUN curl https://wordpress.org/latest.tar.gz -o latest.tar.gz
 ADD setup-wordpress.sh /setup-wordpress.sh
 
 ENTRYPOINT ["/setup-wordpress.sh"]
