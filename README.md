@@ -7,13 +7,25 @@ Plug and Play application stacks with Docker
 
 Creates a container to store and access persistent data.
 
-`docker run -d -v /tmp/dataonly/web:/var/www/html -v /tmp/dataonly/mysql:/var/lib/mysql -v /tmp/dataonly/logs:/var/log -v /tmp/dataonly/backup:/var/backup -v /conf --name data dataonly "test"`
+`docker run -d -v /tmp/dataonly/web:/var/www/html -v /tmp/dataonly/mysql:/var/lib/mysql \
+       -v /tmp/dataonly/logs:/var/log -v /tmp/dataonly/backup:/var/backup \
+	          -v /conf --name data data "my application stack"`
 
 ###SETUP-MYSQL###
 
 Pre-configures MySQL \(MariaDB\) for the MySQL container.
 
-`docker run -it --rm=true --volumes-from data -e "ROOT_PASS=MY_ROOT_PW" -e "BACKUP_PASS=MY_BACKUP_PW" setup-mysql`
+`docker run -it --rm=true --volumes-from data -e ROOT_PASS=$DB_ROOT_PW \
+            -e "APP_DB=$APP_DB" -e "APP_USER=$APP_USER" -e "APP_PASS=$APP_PASS" \
+            -e BACKUP_PASS=$DB_BACKUP_PW setup-mysql`
+
+...where `$APP_DB` is what you want the database to be named, `$APP_SER` is the username you want for your application, `$APP_PASS` is the password for that user, and `$DB_BACKUP_PW` is the password for a "backup" user that can connect from the backup container (below) to do a database backup for you.
+
+###MYSQL###
+
+MySQL \(MariaDB\) container.
+
+`docker run -d -P --volumes-from data --name db mysql`
 
 ###SETUP-WP###
 
@@ -21,13 +33,23 @@ Pre-configures WordPress, if desired.
 
 `docker tag setup-wp:MY_WORDPRESS_VERSION  setup-wp:latest`
 
-`docker run -it --rm=true --volumes-from data setup-wp:latest`
+`docker run -it --rm=true --volumes-from data -e ROOT_PASS=$DB_ROOT_PW \
+            -e "APP_DB=$APP_DB" -e "APP_USER=$APP_USER" -e "APP_PASS=$APP_PASS" \
+	    setup-wp:latest`
 
-###MYSQL###
+...with the same database name, user name and password as above.
 
-MySQL \(MariaDB\) container.
+###SETUP-DRU###
 
-`docker run -d -P --volumes-from data --name db mysql`
+Similar to above: Pre-configures Drupal, if desired.
+
+`docker tag setup-dru:MY_DRUPAL_VERSION  setup-dru:latest`
+
+`docker run -it --rm=true --volumes-from data -e ROOT_PASS=$DB_ROOT_PW \
+            -e "APP_DB=$APP_DB" -e "APP_USER=$APP_USER" -e "APP_PASS=$APP_PASS" \
+	    setup-dru:latest`
+
+...same deal with the db, user and password.
 
 ###APACHE###
 
