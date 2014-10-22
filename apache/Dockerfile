@@ -13,10 +13,20 @@
 FROM centos:centos6
 MAINTAINER Chris Collins <collins.christopher@gmail.com>
 
-RUN yum install -y httpd php php-mysql mod_ssl && yum clean all
+ENV FASTCGI https://github.com/clcollins/mod_fastcgi-rpm.git
+
+RUN yum install -y rpm-build rpmdevtools redhat-rpm-config gcc glibc-static autoconf automake httpd-devel apr-devel git which tar httpd mod_ssl
+
+WORKDIR /root
+RUN git clone $FASTCGI 
+RUN ./mod_fastcgi-rpm/build.sh mod_fastcgi 
+RUN yum install -y ./rpmbuild/RPMS/*/*.rpm
+RUN yum remove -y rpm-build rpmdevtools redhat-rpm-config gcc glibc-static autoconf automake httpd-devel apr-devel git which tar
+WORKDIR /
+
 ADD run-apache.sh /run-apache.sh
 
 EXPOSE 80 
 EXPOSE 443 
 
-ENTRYPOINT ["/run-apache.sh"]
+#ENTRYPOINT ["/run-apache.sh"]
