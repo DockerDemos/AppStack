@@ -3,59 +3,18 @@ AppStack
 
 Plug and Play application stacks with Docker
 
-###DATA###
+## MOVED! ##
 
-Creates a container to store and access persistent data.
+I've moved each of the AppStack images into their own repositories to make managing the individual projects easier:
 
-`docker run -d -v /tmp/dataonly/web:/var/www/html -v /tmp/dataonly/mysql:/var/lib/mysql -v /tmp/dataonly/logs:/var/log -v /tmp/dataonly/backup:/var/backup -v /conf --name data data "my application stack"`
+1. Data - [https://github.com/DockerDemos/appstack-data](https://github.com/DockerDemos/appstack-data)
+1. Apache - [https://github.com/DockerDemos/appstack-apache](https://github.com/DockerDemos/appstack-apache)
+1. MySQL - [https://github.com/DockerDemos/appstack-mysql](https://github.com/DockerDemos/appstack-mysql)
+1. Setup-MySQL - [https://github.com/DockerDemos/appstack-setup-mysql](https://github.com/DockerDemos/appstack-setup-mysql)
+1. Setup-WordPress - [https://github.com/DockerDemos/appstack-setup-wp](https://github.com/DockerDemos/appstack-setup-wp)
+1. Setup-MySQL - [https://github.com/DockerDemos/appstack-setup-drupal](https://github.com/DockerDemos/appstack-setup-drupal)
+1. Backup - [https://github.com/DockerDemos/appstack-backup](https://github.com/DockerDemos/appstack-backup)
 
-###SETUP-MYSQL###
-
-Pre-configures MySQL \(MariaDB\) for the MySQL container.
-
-`docker run -it --rm=true --volumes-from data -e ROOT_PASS=$DB_ROOT_PW -e "APP_DB=$APP_DB" -e "APP_USER=$APP_USER" -e "APP_PASS=$APP_PASS" -e BACKUP_PASS=$DB_BACKUP_PW setup-mysql`
-
-...where `$APP_DB` is what you want the database to be named, `$APP_SER` is the username you want for your application, `$APP_PASS` is the password for that user, and `$DB_BACKUP_PW` is the password for a "backup" user that can connect from the backup container (below) to do a database backup for you.
-
-###MYSQL###
- 
-MySQL \(MariaDB\) container.
-
-`docker run -d -P --volumes-from data --name db mysql`
-
-###SETUP-WP###
- 
-Pre-configures WordPress, if desired.
-
-`docker tag setup-wp:MY_WORDPRESS_VERSION  setup-wp:latest`
-
-`docker run -it --rm=true --volumes-from data -e ROOT_PASS=$DB_ROOT_PW -e "APP_DB=$APP_DB" -e "APP_USER=$APP_USER" -e "APP_PASS=$APP_PASS" setup-wp:latest`
-
-...with the same database name, user name and password as above.
-
-###SETUP-DRU###
- 
-Similar to above: Pre-configures Drupal, if desired.
-
-`docker tag setup-dru:MY_DRUPAL_VERSION  setup-dru:latest`
-
-`docker run -it --rm=true --volumes-from data -e ROOT_PASS=$DB_ROOT_PW -e "APP_DB=$APP_DB" -e "APP_USER=$APP_USER" -e "APP_PASS=$APP_PASS" setup-dru:latest`
-
-...same deal with the db, user and password.
-
-###APACHE###
- 
-Apache webserver container with REQUIRED SSL setup.
-
-`docker run -d -P -e "SSLKEY=$(cat MYSSLKEY.key)" -e "SSLCRT=$(cat MYSSLCERT.crt)" -e "CACERT=$(cat MYCACERT.crt)" --volumes-from data --name web apache`
-
-`CACERT` is optional.  Add this if you need a Certificate Authority certificate or intermediate certificate to complete your SSL certificate chain.
-
-###BACKUP###
-
-Container for connecting to the database contaner and performing database backups.
-
-`docker run -it --rm=true --volumes-from data -e "BACKUP_PASS=MY_BACKUP_PASS" --name backup --link db:db backup`
 
 ##Copyright Information##
 
